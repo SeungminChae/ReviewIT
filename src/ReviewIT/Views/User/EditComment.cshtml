@@ -1,0 +1,31 @@
+@model Comment
+
+@* Id of currently logged-in user. *@
+@{
+    var currentUserId = "";
+    if(User.Identity.IsAuthenticated)
+    {
+        currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+    }
+}
+@* If the author of the comment is equal to logged-in user. *@
+@if(@Model.CreatorUserId == currentUserId || User.IsInRole("Admin"))
+{
+    <h2>Edit Comment</h2>
+    <form method="post" asp-controller="User">
+        <div class="form-group">
+            <label value="write a comment here!"></label>
+            <textarea asp-for="@Model.CommentContent" class="form-control" id="commentBox"></textarea>
+            <input asp-for="@Model.PostId" class="form-control" type="hidden" value="@Model.PostId" />
+
+            <span asp-validation-for="@Model.CommentContent"></span>
+        </div>
+        <p>
+            <button type="submit" asp-action="EditComment" class="btn btn-primary" role="button">Save</button>
+        </p>
+    </form>
+}
+else
+{
+<p>Oops, it seems like you did not create this Comment. Try re-logging in.</p>
+}

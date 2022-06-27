@@ -1,0 +1,51 @@
+@model AddPostViewModel
+@* Id of currently logged-in user. *@
+@{
+    var currentUserId = "";
+    if(User.Identity.IsAuthenticated)
+    {
+        currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+    }
+}
+@* If the author of the comment is equal to logged-in user. *@
+@if(@Model.Post.CreatorUserId == currentUserId || User.IsInRole("Admin"))
+{
+<h2>Edit Post</h2>
+<div class="form-horizontal">
+    <form method="post" asp-controller="User">
+        
+        <div class="form-group">
+            <label asp-for="@Model.Post.Title"></label>
+            <input asp-for="@Model.Post.Title" class="form-control" />
+            <span asp-validation-for="@Model.Post.Title"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Post.PostContent"></label>
+            <textarea style="height: 200px" asp-for="@Model.Post.PostContent" class="form-control"></textarea>
+            <span asp-validation-for="@Model.Post.PostContent"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Post.ProductId"></label>
+            <select asp-for="@Model.Post.ProductId" asp-items="@(new SelectList(Model.Products, "ProductId", "Name"))" class = "form-control"></select>
+            <span asp-validation-for="@Model.Post.ProductId"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Post.RatingForDevice"></label>
+            <input asp-for="@Model.Post.RatingForDevice" class="form-control" />
+            <span asp-validation-for="@Model.Post.RatingForDevice"></span>
+        </div>
+        <div>
+            <input asp-for="@Model.Post.PostId" class="form-control" type="hidden"/>
+        </div>
+
+        <div asp-validation-summary="All"></div>
+        <p>
+            <button type="submit" class="btn btn-primary" role="button">Edit</button>
+        </p>
+    </form>
+</div>
+}
+else
+{
+<p>Oops, it seems like you did not create this Comment. Try re-logging in.</p>
+}

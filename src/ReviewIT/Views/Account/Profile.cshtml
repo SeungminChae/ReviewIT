@@ -1,0 +1,41 @@
+@model User
+<h1>User Information</h1>
+<p>Id: @Model.UserId</p>
+<p>Name: @Model.NickName</p>
+<p>Email: @Model.EmailAddress</p>
+<p>Role: @(Model.IsAdmin ? "Admin" : "User")</p>
+<p><a class="btn btn-primary" asp-action="EditProfile" role="button">Edit</a></p>
+
+@if (Model != null)
+{
+    <div>
+        <h2>Posts</h2>
+    <ul class="list-group">
+    @foreach (Post p in @Model.Posts)
+    {
+        if(p.CreatorUserId== @Model.UserId)
+        {
+            <a class="no-decoration" asp-controller="Home" asp-action="post" asp-route-PostId="@p.PostId">
+                <li class="list-group-item list-group-item-action">
+            @p.PostContent
+            </li></a>
+        }
+
+    }
+    </ul>
+        <h2>Comments</h2>
+    <ul class="list-group">
+    @foreach (Comment c in @Model.Comments)
+    {
+        if(c.CreatorUserId== @Model.UserId)
+        {
+            <a class="no-decoration" href = @("/post/"+c.PostId+"#comment"+c.CommentId) >
+                <li class="list-group-item list-group-item-action">
+            @c.CommentContent
+            </li></a>
+        }
+    }
+    </div>
+}
+
+

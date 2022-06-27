@@ -1,0 +1,70 @@
+@model IndexViewModel
+
+<Div>Filter by brands</Div>
+
+<div class="brandbutton">
+    <a class="no-decoration" asp-controller="Home" asp-action="Index" asp-route-id="1"><img src="/lib/images/Brand_Apple.png" width="200" height="200" alt="Apple"></a>
+    <a class="no-decoration" asp-controller="Home" asp-action="Index" asp-route-id="2"><img src="/lib/images/Brand_Samsung.jpg" width="200" height="200" alt="Samsung"></a>
+    <a class="no-decoration" asp-controller="Home" asp-action="Index" asp-route-id="3"><img src="/lib/images/Brand_Google.jpg" width="200" height="200" alt="Google"></a>
+    <a class="no-decoration" asp-controller="Home" asp-action="Products"><img src="/lib/images/smartphoneIcon.png" width="200" height="200" alt="Products Page"></a>
+</div>
+
+<div>
+    @if(User.Identity.IsAuthenticated)
+    {
+        <p>
+            <a asp-controller="User" asp-action="AddPost" class="btn btn-primary" role="button">Add Post</a>
+        </p>
+    }
+    else
+    {
+        <p>
+            Please sign-in to add a post.
+        </p>
+    }
+    <h3>Recent Posts</h3>
+    <ul class="list-group">
+    @foreach(var item in Model.Posts)
+    {
+            Product product = new Product();
+            foreach(var p in Model.Products)
+            {
+                if(p.ProductId == item.ProductId)
+                {
+                    product = p;
+
+                    break;
+                }
+            }
+            Brand brand = @Model.Brands.FirstOrDefault(b => b.BrandId == product.BrandId);
+            string filePath = "/lib/images" + brand.ImagePath;
+            <a class="no-decoration" asp-controller="Home" asp-action="post" asp-route-PostId="@item.PostId"><li class="list-group-item list-group-item-action">
+                <img src=@filePath width="30" height="30" alt=@brand.BrandName style="display: inline-block; border-width:0px;"/>
+                @item.Title</li></a>
+    }
+    </ul>
+</div>
+
+@{
+    var prevDisabled = !Model.PL.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.PL.HasNextPage ? "disabled" : "";
+}
+
+<a asp-controller="Home" 
+   asp-action="Index"
+   asp-route-sort='@Context.Request.Query["sort"]'
+   asp-route-filter='@Context.Request.Query["filter"]'
+   asp-route-pageNumber="@(Model.PL.PageIndex - 1)"
+   class="btn btn-outline-primary @prevDisabled">
+    Previous
+</a>
+
+<a asp-controller="Home" 
+   asp-action="Index"
+   asp-route-sort='@Context.Request.Query["sort"]'
+   asp-route-filter='@Context.Request.Query["filter"]'
+   asp-route-pageNumber="@(Model.PL.PageIndex + 1)"
+   class="btn btn-outline-primary @nextDisabled">
+    Next
+</a>
+            

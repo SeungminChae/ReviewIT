@@ -1,0 +1,64 @@
+
+<style>
+#myDIV1 {
+  width: 100%;
+  padding: 50px 0;
+  text-align: center;
+  background-color: lightblue;
+  margin-top: 20px;
+}
+#myDIV2 {
+  width: 100%;
+  padding: 50px 0;
+  text-align: center;
+  background-color: yellow;
+  margin-top: 20px;
+}
+#myDIV3 {
+  width: 100%;
+  padding: 50px 0;
+  text-align: center;
+  background-color: red;
+  margin-top: 20px;
+}
+
+</style>
+
+
+<p>Click the "Try it" button to toggle between hiding and showing the DIV element:</p>
+@{
+    var number = 0;
+    for(number = 1; number < 4; number++)
+    {
+        @* @(values) will be rendered in server side. and "'value' + variable" will be rendered literally in html *@
+        <button onclick="myFunction('@("myDIV" + number)')">Try it</button>
+
+        <div id='@("myDIV" + number)' class="a">
+        This is my @("myDIV" + number) element.
+        </div>
+        <br /><br />
+    }
+}
+
+
+<p><b>Note:</b> The element will not take up any space when the display property set to "none".</p>
+
+<script>
+function myFunction(elementID) {
+  var x = document.getElementById(elementID);
+  var y = document.getElementsByClassName('a');
+ 
+  if (x.style.display === "none") {
+     for(var i = 0; i < y.length; i++){
+      y[i].style.display = "none";
+    }
+    x.style.display = "block";
+  } else {
+    for(var i = 0; i < y.length; i++){
+        y[i].style.display = "none";
+      }
+    x.style.display = "none";
+  }
+}
+</script>
+

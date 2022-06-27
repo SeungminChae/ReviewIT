@@ -1,0 +1,33 @@
+@model EditProfileViewModel
+<h1>Edit User</h1>
+<form asp-action="EditProfile" method="POST" class="form">
+    <div class="form-group">
+        <label asp-for="NickName"></label>
+        <input asp-for="NickName" class="form-control" />
+        <span asp-validation-for="NickName"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EmailAddress"></label>
+        <input asp-for="EmailAddress" class="form-control" />
+        <span asp-validation-for="EmailAddress"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NewPassword"></label>
+        <input type="password" name="NewPassword" class="form-control" />
+        <span asp-validation-for="NewPassword"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ConfirmPassword"></label>
+        <input type="password" name="ConfirmPassword" class="form-control" />
+        <span asp-validation-for="ConfirmPassword"></span>
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+        <label asp-for="OldPassword">Enter your password to confirm changes</label>
+        <input type="password" name="OldPassword" class="form-control" />
+        <span asp-validation-for="OldPassword"></span>
+    </div>
+    <input type="submit" class="btn btn-success" value="Save" />
+</form>

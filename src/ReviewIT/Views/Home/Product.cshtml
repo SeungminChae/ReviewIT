@@ -1,0 +1,23 @@
+@model ProductViewModel
+
+@if (Model != null)
+{
+  <div class="productStyles">
+    <h3>@Model.Product.Name</h3>
+    <img class="img-fluid" src="../lib/images/@Model.Product.ImagePath">
+    <p>@Model.Product.Description</p>
+    <p>Price: $@Model.Product.Price</p>
+  </div>
+  <h2>Reviews about this Product</h2>
+  <ul class="list-group">
+    @foreach(var item in Model.Posts)
+    {
+      <a class="no-decoration" asp-controller="Home" asp-action="post" asp-route-PostId="@item.PostId"><li class="list-group-item list-group-item-action">
+          @item.Title</li></a>
+    }
+  </ul>
+}
+else
+{
+    <p>No products have been found with that provided Id.</p>
+}

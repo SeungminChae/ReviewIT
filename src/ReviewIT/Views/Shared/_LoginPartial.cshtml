@@ -1,0 +1,28 @@
+@using Microsoft.AspNetCore.Identity
+@if(User.Identity.IsAuthenticated)
+{
+    <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Hello, @User.Identity.Name
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+                <a asp-controller="Account" asp-action="Profile" class="dropdown-item" role="button">Profile</a>
+            </div>
+        </li>
+        <li class="nav-item active">
+            <a asp-controller="Account" asp-action="Logout" class="nav-link" role="button">Logout</a>
+        </li>
+    </ul>
+}
+else
+{
+    <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+            <a asp-controller="Account" asp-action="Register" class="nav-link" role="button"><button class="btn btn-primary">Register</button></a>
+        </li>
+        <li class="nav-item">
+            <a asp-controller="Account" asp-action="Login" class="nav-link" role="button"><button class="btn btn-primary">Login</button></a>
+        </li>
+    </ul>
+}

@@ -1,0 +1,40 @@
+<html>
+<head>
+<link href="/lib/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+ <link href="/css/main.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-light" style="background-color: #e3f2fd;">
+        <div class="container">
+            @*could have an image in this section <img src="/lib/images/sampleLogo1.JPG" style="width:200px; height:100px;"/>*@
+            <a class="navbar-brand mr-auto" asp-controller="Home" asp-action="Index">ReviewIT</a>
+            
+            <form method="GET" asp-controller="Home" asp-action="Index" class="form-inline my-2 my-lg-0">
+                <div class="input-group">
+                    <input name="filter" class="form-control" value='@Context.Request.Query["filter"]'/>
+                    <div class="input-group-append">
+                        <input type="submit" value="Search" class="btn btn-secondary" />
+                    </div>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary" role="button">Reset</a>
+                </div>
+            </form>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div>
+            @RenderBody()
+        </div>
+    
+        <footer class="text-center">
+            <hr>
+            © ReviewIT @DateTime.Now.Year  
+            <div>Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+        </footer>
+    </div>
+    <script src="/lib/js/jquery-3.4.1.min.js"></script>
+    <script src="/lib/js/bootstrap.min.js"></script>
+</body>
+</html>

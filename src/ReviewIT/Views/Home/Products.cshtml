@@ -1,0 +1,17 @@
+@model IEnumerable<Product>
+    <div>
+    @foreach(var item in Model)
+    {
+        <div class="card col-lg-4">
+            <img class="card-img-top" src="/lib/images/@item.ImagePath" height="500px"></img>
+            <div class="card-body">
+                <h3 class="card-title">@item.Name</h3>
+                <h3 class="card-title">$@item.Price</h3>
+                <p class="card-text">@item.Description</p>
+                <div class="text-center">
+                    <a class="btn btn-primary" asp-controller="Home" asp-action="Product" asp-route-id="@item.ProductId">View</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

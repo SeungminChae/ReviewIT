@@ -1,0 +1,133 @@
+body {
+    background-color: lightblue;
+}
+
+body > .container {
+    clear: both;
+    margin-right: auto;
+    margin-left: auto;
+    width: 1000px;
+    background-color: snow;
+}
+
+hr{
+    border-top: 2px solid rgba(0,0,0,.1);
+}
+
+h1{
+    border-bottom: 1px solid rgba(0,0,0,.1);
+    padding-bottom: 10px;
+}
+
+img{
+    border: 5px solid black;
+}
+
+.productStyles{
+    text-align: center;
+    margin-top: 30px;
+}
+
+.productStyles h3{
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.productStyles p:first-of-type{
+    margin-top: 15px;
+}
+
+.productStyles p:last-of-type{
+    font-weight: 500;
+}
+
+.productStyles p{
+    font-size: 25px;
+}
+footer {
+    color: gray;
+}
+
+#Apple
+{
+    padding: 20 20 20 20;
+}
+
+#Samsung
+{
+    padding: 20 20 20 20;
+}
+
+#Google
+{
+    padding: 20 20 20 20;
+}
+.card {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 30px !important;
+    display: inline-block;
+    width: 33%;
+    padding: 0;
+}
+
+.list-group-item-action:hover{
+    background-color: skyblue;
+    color: black;
+}
+
+a.no-decoration{
+    text-decoration:  none;
+}
+
+/* Post page Layout */
+.pageFContainer{
+    width:90%;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: lightgoldenrodyellow;
+}
+
+.titleSection{
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.titleSection #nicknameInfo{
+    float:left;
+    width:60%;
+}
+
+.titleSection #dateInfo{
+    float: left;
+    width: 40%;
+}
+
+.postSection{
+    border: black solid 0px;
+    box-sizing: content-box;
+}
+
+.commentSection{
+    position: relative;
+    width: 95%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.commentSection #buttons{
+    float: right;
+}
+
+#commentBox{
+    height: 120px;
+    width: 100%;
+}
+
+#toHome{
+    position: relative;
+    left: 42%;
+    width: 16%;
+}
+
+/* Post Page Layout End */

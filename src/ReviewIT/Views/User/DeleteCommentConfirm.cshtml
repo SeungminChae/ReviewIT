@@ -1,0 +1,30 @@
+@model Comment
+
+@* Id of currently logged-in user. *@
+@{
+    var currentUserId = "";
+    if(User.Identity.IsAuthenticated)
+    {
+        currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+    }
+}
+@* If the author of the comment is equal to logged-in user. *@
+@if(@Model.CreatorUserId == currentUserId || User.IsInRole("Admin"))
+{
+    <h2>Delete Comment Confirm</h2>
+    <form method="post">
+        <div class="form-group">
+            <input type="hidden" asp-for="PostId" />
+            <label><strong>Content:</strong><br />@Model.CommentContent</label><br />
+            <label><strong>Created on:</strong><br /> @Model.CreationDate</label>
+        </div>
+        <p>
+            Do you wish to delete the comment?<br />
+            <button type="submit" class="btn btn-danger" role="button">Delete</button>
+        </p>
+    </form>
+}
+else
+{
+<p>Oops, it seems like you did not create this Comment. Try re-logging in.</p>
+}

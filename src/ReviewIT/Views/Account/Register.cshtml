@@ -1,0 +1,38 @@
+@model RegisterViewModel
+
+<h2>Register</h2>
+
+<div class="form-horizontal">
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="NickName"></label>
+            <input asp-for="NickName" class="form-control" />
+            <span asp-validation-for="NickName"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="UserId"></label>
+            <input asp-for="UserId" class="form-control" />
+            <span asp-validation-for="UserId"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="EmailAddress"></label>
+            <input asp-for="EmailAddress" class="form-control" />
+            <span asp-validation-for="EmailAddress"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PasswordConfirm"></label>
+            <input asp-for="PasswordConfirm" class="form-control" />
+            <span asp-validation-for="PasswordConfirm"></span>
+        </div>
+
+        <div asp-validation-summary="All"></div>
+        <p>
+            <button type="submit" class="btn btn-primary" role="button">Register</button>
+        </p>
+    </form>
+</div>

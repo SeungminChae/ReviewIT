@@ -1,0 +1,314 @@
+@model PostViewModel
+
+@* Id of currently logged-in user. *@
+@{
+    var currentUserId = "";
+    int rating = @Model.Post.RatingForDevice;
+    string fileLocation = "/lib/images/" + rating +"star.png";
+    string altText = rating + " star";
+    int postUpCount = 0;
+    int postDownCount = 0;
+}
+@if(User.Identity.IsAuthenticated)
+{
+    currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+}
+@functions{
+    private async Task RenderComment(Comment item, string currentUserId, int w){
+    <div style="width: @w%; float:right;" >
+        @* only show comments that are not archived. *@
+        @if(!item.IsArchived)
+        {
+            // show user's nickname.
+            User user = item.CreatorUser;
+            <p style="font-weight: bold;" id='@("comment"+item.CommentId)'>@user.NickName</p>
+            <p style="max-width: 95%;">@item.CommentContent</p>
+
+            @if(User.Identity.IsAuthenticated)
+            {
+                CommentVote existingCV = @Model.CommentVotes.Find(x=>x.UserId == currentUserId && x.CommentId == item.CommentId);
+                <form method="post" asp-controller="User" asp-action="AddCommentVote"  style="float:left;">
+                    <div class="form-group">
+                        <input asp-for= "NewCommentVote.CommentId" type="hidden" value= "@item.CommentId"/>
+                        <input asp-for= "Post.PostId" type="hidden" value= "@item.PostId"/>
+                        <input asp-for="NewCommentVote.IsUp" class="form-control" type="hidden" value="true" />
+                    </div>
+                    <p>
+                        <button type="submit" role="button" style="background-color: white;">
+                            @if(@existingCV != null)
+                            {
+                                if(@existingCV.IsUp)
+                                {
+                                    <img src="/lib/images/like selected.png" alt="thumbs up" style="height: 15px; width:15px; border-width:0px;"/>
+                                }
+                                else
+                                {
+                                    <img src="/lib/images/like.png" alt="thumbs up" style="height: 15px; width:15px; border-width:0px;"/>
+                                }
+                            }
+                            else
+                            {
+                                <img src="/lib/images/like.png" alt="thumbs up" style="height: 15px; width:15px; border-width:0px;"/>
+                            }
+                        </button>
+                    </p>
+                    <div asp-validation-summary="All"></div>
+                </form>
+                <form method="post" asp-controller="User" asp-action="AddCommentVote" style="float:left;">
+                    <div class="form-group">
+                        <input asp-for= "NewCommentVote.CommentId" type="hidden" value= "@item.CommentId"/>
+                        <input asp-for= "Post.PostId" type="hidden" value= "@item.PostId"/>
+                        <input asp-for="NewCommentVote.IsUp" class="form-control" type="hidden" value="false" />
+                    </div>
+                    <p>
+                        <button type="submit" role="button">
+                            @if(@existingCV != null)
+                            {
+                                @if(@existingCV.IsUp)
+                                {
+                                    <img src="/lib/images/like.png" alt="thumbs up" style="height: 15px; width:15px; border-width:0px; transform: scaleY(-1);"/>
+                                }
+                                else
+                                {
+                                    <img src="/lib/images/like selected.png" alt="thumbs up" style="height: 15px; width:15px; border-width:0px; transform: scaleY(-1);"/>
+                                }
+                            }
+                            else
+                            {
+                                <img src="/lib/images/like.png" alt="thumbs up" style="height: 15x; width:15px; border-width:0px; transform: scaleY(-1);"/>
+                            }
+                        </button>
+                    </p>    
+                </form>
+            }
+            {
+            // count number of votes for specific comment.
+                int upCount = 0;
+                int downCount = 0;
+                foreach (var cv in Model.CommentVotes)
+                {
+                    if (cv.CommentId == item.CommentId)
+                    {
+                        if (cv.IsUp)
+                        {
+                            upCount++;
+                        }
+                        else
+                        {
+                            downCount++;
+                        }
+                    }
+                }
+            <p style="font-size: 0.8em; clear: both;">Upvotes : @upCount &nbsp; &nbsp; Downvotes : @downCount</p>
+            }
+            
+            @if(User.Identity.IsAuthenticated)
+            {
+                @if(currentUserId == item.CreatorUserId || User.IsInRole("Admin"))
+                {
+                    <p>
+                        <a asp-controller="User" asp-action="EditComment" asp-route-commentId="@item.CommentId">edit</a> &nbsp;|
+                        <a asp-controller="User" asp-action="DeleteCommentConfirm" asp-route-id="@item.CommentId">delete</a>
+                    </p>
+                }
+                <a href='@("#comment" + item.CommentId)' onclick="ToggleReplyCommentForm('@(item.CommentId)')">reply</a><br />
+                <p>
+                <form method="post" style="width:90%; display:none;" class="replayCommentForm" id='@("replyComment" + item.CommentId)'>
+                    <label>@("Reply to " + user.NickName)</label>
+                    <div class="form-group">
+                        <input asp-for="NewComment.PostId" class="form-control" type="hidden" value="@Model.Post.PostId"/>
+                        <input asp-for="NewComment.ParentCommentId" class="form-control" type="hidden" value="@item.CommentId"/>
+                        <textarea asp-for="NewComment.CommentContent" class="form-control" id="commentBox"></textarea>
+                        <span asp-validation-for="NewComment.CommentContent"></span>
+                    </div>
+                    <p>
+                        <button type="submit" asp-controller="User" asp-action="addComment" class="btn btn-primary" role="button">Add</button>
+                    </p>
+                </form>
+                </p>
+            }    
+            
+            <hr />
+    
+        }
+        else
+        {
+            <p>The comment has been deleted.</p>
+            <hr />
+        }
+        @if(item.ChildComments.Count != 0)
+        {
+            foreach(Comment c in item.ChildComments)
+            {
+                // Displays all of the child comments
+                // third parameter is the width of the comment.
+                await RenderComment(c, currentUserId, w-3);
+            }
+        }
+    </div>
+    }
+}
+ 
+@if (Model != null)
+{
+    <div class="pageContainer">
+        @if(!Model.Post.IsArchived)
+        {
+            <div class="titleSection">
+                <h2 id="titleInfo">@Model.Post.Title</h2>
+                <hr />
+                <div id="nicknameInfo">by @Model.User.NickName</div>
+                <div id="dateInfo">created on @Model.Post.CreationDate</div>
+                @{
+                    // count number of votes for current post.
+                    foreach (var pv in Model.PostVotes)
+                    {
+                        if (pv.IsUp)
+                        {
+                            postUpCount++;
+                        }
+                        else
+                        {
+                            postDownCount++;
+                        }
+                    }
+                    <p style="font-size: 0.8em;">Upvotes : @postUpCount &nbsp; &nbsp; &nbsp; Downvotes : @postDownCount</p>
+                    <p>
+                        @* Displays PostVote buttons *@
+                        @if(User.Identity.IsAuthenticated)
+                        {
+                            <form method="post" asp-controller="User" asp-action="AddPostVote" style="float:left; width:5%; margin-left:40%;">
+                                <div class="form-group">
+                                    <input asp-for="NewPostVote.PostId" class="form-control" type="hidden" value="@Model.Post.PostId"/>
+                                    <input asp-for="NewPostVote.IsUp" class="form-control" type="hidden" value="true" />
+                                </div>
+                                <p>
+                                    <button type="submit" role="button" style="background-color: white;">
+                                        @if(@Model.NewPostVote != null)
+                                        {
+                                            @if(@Model.NewPostVote.IsUp)
+                                            {
+                                                <img src="/lib/images/like selected.png" alt="thumbs up" style="height: 30px; width:30px; border-width:0px;"/>
+                                            }
+                                            else
+                                            {
+                                                <img src="/lib/images/like.png" alt="thumbs up" style="height: 30px; width:30px; border-width:0px;"/>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <img src="/lib/images/like.png" alt="thumbs up" style="height: 30px; width:30px; border-width:0px;"/>
+                                        }
+                                    </button>
+                                </p>
+                                <div asp-validation-summary="All"></div>
+                            </form>
+                            <form method="post" asp-controller="User" asp-action="AddPostVote" style="float:right; width:5%; margin-right:40%;">
+                                <div class="form-group">
+                                    <input asp-for="NewPostVote.PostId" class="form-control" type="hidden" value="@Model.Post.PostId"/>
+                                    <input asp-for="NewPostVote.IsUp" class="form-control" type="hidden" value="false" />
+                                </div>
+                                <p>
+                                    <button type="submit" role="button">
+                                        @if(@Model.NewPostVote != null)
+                                        {
+                                            @if(@Model.NewPostVote.IsUp)
+                                            {
+                                                <img src="/lib/images/like.png" alt="thumbs up" style="height: 30px; width:30px; border-width:0px; transform: scaleY(-1);"/>
+                                            }
+                                            else
+                                            {
+                                                <img src="/lib/images/like selected.png" alt="thumbs up" style="height: 30px; width:30px; border-width:0px; transform: scaleY(-1);"/>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <img src="/lib/images/like.png" alt="thumbs up" style="height: 30px; width:30px; border-width:0px; transform: scaleY(-1);"/>
+                                        }
+                                    </button>
+                                </p>    
+                            </form>
+                        }
+                    </p>
+                }
+            <p style="clear:both;"></p>
+                <div id="star">@Model.User.NickName rated this product
+                    <img src=@fileLocation alt=@altText style="height:51px; width:258px; border-width:2px;"/>
+                </div>
+            </div>
+            <p style="clear:both;"></p>
+            @if(currentUserId == @Model.Post.CreatorUserId || User.IsInRole("Admin"))
+            {
+                <a asp-controller="User" asp-action="EditPost" asp-route-postId="@Model.Post.PostId" class="btn btn-primary" role="button">Edit</a>
+                <a asp-controller="User" asp-action="DeletePostConfirm" asp-route-Id="@Model.Post.PostId" class="btn btn-primary" role="button">Delete</a>
+            }
+            <p style="clear:both;"></p>
+            <div class="postSection">
+                @{
+                    fileLocation = "/lib/images"+@Model.Product.ImagePath;
+                    altText = @Model.Product.Name;
+                }
+                <img src=@fileLocation alt=altText style="width: 30%; margin-right: 5%; float:left;"/>
+                <p style="width: 65%; float:left;">@Model.Post.PostContent <br /></p>
+            </div>
+        }
+        else
+        {
+            <p>This post has been deleted</p>
+        }
+        <div class="commentSection" asp-controller="User" style="clear:both;">
+            <h3>Comments</h3>
+            @if(User.Identity.IsAuthenticated)
+            {
+                <form method="post">
+                    <div class="form-group">
+                        <label>write a comment!</label>
+                        <input asp-for="NewComment.PostId" class="form-control" type="hidden" value="@Model.Post.PostId"/>
+                        <textarea asp-for="NewComment.CommentContent" class="form-control" id="commentBox"></textarea>
+                        <span asp-validation-for="NewComment.CommentContent"></span>
+                    </div>
+                    <p>
+                        <button type="submit" asp-controller="User" asp-action="addComment" class="btn btn-primary" role="button">Add</button>
+                    </p>
+                </form>
+            }
+            else
+            {
+                <p>Please sign-in to write a comment.</p>
+            }
+            <div>
+                @* show all of the comments in the post *@
+                @foreach (var item in Model.Comments)
+                {
+                    await RenderComment(item, @Html.Raw(currentUserId).ToString(), 100);
+                }
+            </div>
+            <a style="clear: both;" asp-controller="Home" asp-action="Index"><button id="toHome" class="btn btn-secondary">To Home</button></a>
+        </div>
+        
+    </div>
+
+    <script>
+        function ToggleReplyCommentForm(elementID) {
+        var id = "replyComment" + elementID;
+        var x = document.getElementById(id);
+        var y = document.getElementsByClassName('replayCommentForm');
+        
+        if (x.style.display === "none") {
+            for(var i = 0; i < y.length; i++){
+            y[i].style.display = "none";
+            }
+            x.style.display = "block";
+        } else {
+            for(var i = 0; i < y.length; i++){
+                y[i].style.display = "none";
+            }
+            x.style.display = "none";
+        }
+        }
+    </script>
+}
+else
+{
+    <p>No post have been found with that provided Id.</p>
+}
