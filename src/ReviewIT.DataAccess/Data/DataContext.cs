@@ -102,105 +102,105 @@ namespace ReviewIT.DataAccess
             );
 
 
-            /* Retrieve comment data */
-            TextFieldParser commentParser = new TextFieldParser(@"..\\ReviewIT.DataAccess\\DbMockFiles\\Comment_Mock_Data.csv");
-            commentParser.HasFieldsEnclosedInQuotes = true;
-            commentParser.SetDelimiters(",");
+            // /* Retrieve comment data */
+            // TextFieldParser commentParser = new TextFieldParser(@"..\\ReviewIT.DataAccess\\DbMockFiles\\Comment_Mock_Data.csv");
+            // commentParser.HasFieldsEnclosedInQuotes = true;
+            // commentParser.SetDelimiters(",");
 
-            // Reads first line to get rid of headers.
-            string[] commentfields = commentParser.ReadFields();
+            // // Reads first line to get rid of headers.
+            // string[] commentfields = commentParser.ReadFields();
 
-            // Loop through the data rows until the end.
-            while (!commentParser.EndOfData)
-            {
-                // takes a line of data.
-                commentfields = commentParser.ReadFields();
+            // // Loop through the data rows until the end.
+            // while (!commentParser.EndOfData)
+            // {
+            //     // takes a line of data.
+            //     commentfields = commentParser.ReadFields();
                 
-                // assign values and add the data.
-                try{ // try parsing string value of parentid to int value.
-                    modelBuilder.Entity<Comment>().HasData(new Comment{ CommentId = Int32.Parse(commentfields[0]), PostId = Int32.Parse(commentfields[1]), CreatorUserId = commentfields[2], CommentContent = commentfields[3], CreationDate=DateTime.Parse(commentfields[4]), ParentCommentId = Int32.Parse(commentfields[5]), IsArchived = commentfields[6] == "1"});
-                }
-                catch{ // if parentId is null, leave the variable with default value.
-                    modelBuilder.Entity<Comment>().HasData(new Comment{ CommentId = Int32.Parse(commentfields[0]), PostId = Int32.Parse(commentfields[1]), CreatorUserId = commentfields[2], CommentContent = commentfields[3], CreationDate=DateTime.Parse(commentfields[4]), IsArchived = commentfields[6] == "1"});
-                }
-            }
-            commentParser.Close();
+            //     // assign values and add the data.
+            //     try{ // try parsing string value of parentid to int value.
+            //         modelBuilder.Entity<Comment>().HasData(new Comment{ CommentId = Int32.Parse(commentfields[0]), PostId = Int32.Parse(commentfields[1]), CreatorUserId = commentfields[2], CommentContent = commentfields[3], CreationDate=DateTime.Parse(commentfields[4]), ParentCommentId = Int32.Parse(commentfields[5]), IsArchived = commentfields[6] == "1"});
+            //     }
+            //     catch{ // if parentId is null, leave the variable with default value.
+            //         modelBuilder.Entity<Comment>().HasData(new Comment{ CommentId = Int32.Parse(commentfields[0]), PostId = Int32.Parse(commentfields[1]), CreatorUserId = commentfields[2], CommentContent = commentfields[3], CreationDate=DateTime.Parse(commentfields[4]), IsArchived = commentfields[6] == "1"});
+            //     }
+            // }
+            // commentParser.Close();
             
-            /* Retrieve post data */
-            TextFieldParser postParser = new TextFieldParser(@"..\\ReviewIT.DataAccess\\DbMockFiles\\Post_Mock_Data.csv");
-            postParser.HasFieldsEnclosedInQuotes = true;
-            postParser.SetDelimiters(",");
+            // /* Retrieve post data */
+            // TextFieldParser postParser = new TextFieldParser(@"..\\ReviewIT.DataAccess\\DbMockFiles\\Post_Mock_Data.csv");
+            // postParser.HasFieldsEnclosedInQuotes = true;
+            // postParser.SetDelimiters(",");
 
-            // Reads first line to get rid of headers.
-            string[] postfields = postParser.ReadFields();
+            // // Reads first line to get rid of headers.
+            // string[] postfields = postParser.ReadFields();
 
-            // Loop through the data rows until the end.
-            while (!postParser.EndOfData)
-            {
-                // takes a line of data.
-                postfields = postParser.ReadFields();
+            // // Loop through the data rows until the end.
+            // while (!postParser.EndOfData)
+            // {
+            //     // takes a line of data.
+            //     postfields = postParser.ReadFields();
                 
-                // assign values and add the data.
-                modelBuilder.Entity<Post>().HasData(new Post{ PostId = Int32.Parse(postfields[0]), Title =postfields[1], ProductId = Int32.Parse(postfields[2]), CreatorUserId = postfields[3], PostContent = postfields[4], RatingForDevice = Int32.Parse(postfields[5]), CreationDate=DateTime.Parse(postfields[6]), IsArchived = postfields[7] == "1"});
-            }
-            postParser.Close();
+            //     // assign values and add the data.
+            //     modelBuilder.Entity<Post>().HasData(new Post{ PostId = Int32.Parse(postfields[0]), Title =postfields[1], ProductId = Int32.Parse(postfields[2]), CreatorUserId = postfields[3], PostContent = postfields[4], RatingForDevice = Int32.Parse(postfields[5]), CreationDate=DateTime.Parse(postfields[6]), IsArchived = postfields[7] == "1"});
+            // }
+            // postParser.Close();
 
-            /* Retrieve postvote data */
-            TextFieldParser postVoteParser = new TextFieldParser(@"..\\ReviewIT.DataAccess\\DbMockFiles\\PostVote_Mock_Data.csv");
-            postVoteParser.HasFieldsEnclosedInQuotes = true;
-            postVoteParser.SetDelimiters(",");
+            // /* Retrieve postvote data */
+            // TextFieldParser postVoteParser = new TextFieldParser(@"..\\ReviewIT.DataAccess\\DbMockFiles\\PostVote_Mock_Data.csv");
+            // postVoteParser.HasFieldsEnclosedInQuotes = true;
+            // postVoteParser.SetDelimiters(",");
 
-            // Reads first line to get rid of headers.
-            string[] fields = postVoteParser.ReadFields();
+            // // Reads first line to get rid of headers.
+            // string[] fields = postVoteParser.ReadFields();
 
-            // Loop through the data rows until the end.
-            while (!postVoteParser.EndOfData)
-            {
-                // takes a line of data.
-                fields = postVoteParser.ReadFields();
+            // // Loop through the data rows until the end.
+            // while (!postVoteParser.EndOfData)
+            // {
+            //     // takes a line of data.
+            //     fields = postVoteParser.ReadFields();
                 
-                // assign values and add the data.
-                modelBuilder.Entity<PostVote>().HasData(new PostVote{ PostVoteId = Int32.Parse(fields[0]), PostId = Int32.Parse(fields[1]), UserId = fields[2], IsUp = bool.Parse(fields[3]), CreationDate=DateTime.Parse(fields[4]), IsArchived = fields[5] == "1"});
-            }
-            postVoteParser.Close();
+            //     // assign values and add the data.
+            //     modelBuilder.Entity<PostVote>().HasData(new PostVote{ PostVoteId = Int32.Parse(fields[0]), PostId = Int32.Parse(fields[1]), UserId = fields[2], IsUp = bool.Parse(fields[3]), CreationDate=DateTime.Parse(fields[4]), IsArchived = fields[5] == "1"});
+            // }
+            // postVoteParser.Close();
 
-            /* Retrieve commentVote data */
-            TextFieldParser commentVoteParser = new TextFieldParser(@"..\\ReviewIT.DataAccess\\DbMockFiles\\CommentVote_Mock_Data.csv");
-            commentVoteParser.HasFieldsEnclosedInQuotes = true;
-            commentVoteParser.SetDelimiters(",");
+            // /* Retrieve commentVote data */
+            // TextFieldParser commentVoteParser = new TextFieldParser(@"..\\ReviewIT.DataAccess\\DbMockFiles\\CommentVote_Mock_Data.csv");
+            // commentVoteParser.HasFieldsEnclosedInQuotes = true;
+            // commentVoteParser.SetDelimiters(",");
 
-            // Reads first line to get rid of headers.
-            fields = commentVoteParser.ReadFields();
+            // // Reads first line to get rid of headers.
+            // fields = commentVoteParser.ReadFields();
 
-            // Loop through the data rows until the end.
-            while (!commentVoteParser.EndOfData)
-            {
-                // takes a line of data.
-                fields = commentVoteParser.ReadFields();
+            // // Loop through the data rows until the end.
+            // while (!commentVoteParser.EndOfData)
+            // {
+            //     // takes a line of data.
+            //     fields = commentVoteParser.ReadFields();
                 
-                // assign values and add the data.
-                modelBuilder.Entity<CommentVote>().HasData(new CommentVote{ CommentVoteId = Int32.Parse(fields[0]), CommentId = Int32.Parse(fields[1]), UserId = fields[2], IsUp = bool.Parse(fields[3]), CreationDate=DateTime.Parse(fields[4]), IsArchived = fields[5] == "1"});
-            }
-            commentVoteParser.Close();
+            //     // assign values and add the data.
+            //     modelBuilder.Entity<CommentVote>().HasData(new CommentVote{ CommentVoteId = Int32.Parse(fields[0]), CommentId = Int32.Parse(fields[1]), UserId = fields[2], IsUp = bool.Parse(fields[3]), CreationDate=DateTime.Parse(fields[4]), IsArchived = fields[5] == "1"});
+            // }
+            // commentVoteParser.Close();
 
-            /* Retrieve User data */
-            TextFieldParser userParser = new TextFieldParser(@"..\\ReviewIT.DataAccess\\DbMockFiles\\User_Mock_Data.csv");
-            userParser.HasFieldsEnclosedInQuotes = true;
-            userParser.SetDelimiters(",");
+            // /* Retrieve User data */
+            // TextFieldParser userParser = new TextFieldParser(@"..\\ReviewIT.DataAccess\\DbMockFiles\\User_Mock_Data.csv");
+            // userParser.HasFieldsEnclosedInQuotes = true;
+            // userParser.SetDelimiters(",");
 
-            // Reads first line to get rid of headers.
-            fields = userParser.ReadFields();
+            // // Reads first line to get rid of headers.
+            // fields = userParser.ReadFields();
 
-            // Loop through the data rows until the end.
-            while (!userParser.EndOfData)
-            {
-                // takes a line of data.
-                fields = userParser.ReadFields();
+            // // Loop through the data rows until the end.
+            // while (!userParser.EndOfData)
+            // {
+            //     // takes a line of data.
+            //     fields = userParser.ReadFields();
                 
-                // assign values and add the data.
-                modelBuilder.Entity<User>().HasData(new User{ UserId = fields[0], PasswordHash = fields[1], EmailAddress = fields[2], NickName = fields[3], CreationDate=DateTime.Parse(fields[4]), IsAdmin = fields[5] == "1", IsArchived = fields[6] == "1"});
-            }
-            userParser.Close();
+            //     // assign values and add the data.
+            //     modelBuilder.Entity<User>().HasData(new User{ UserId = fields[0], PasswordHash = fields[1], EmailAddress = fields[2], NickName = fields[3], CreationDate=DateTime.Parse(fields[4]), IsAdmin = fields[5] == "1", IsArchived = fields[6] == "1"});
+            // }
+            // userParser.Close();
             
         }
     }
